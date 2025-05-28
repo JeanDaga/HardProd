@@ -8,6 +8,7 @@ import {
   TextInput,
   View
 } from 'react-native';
+import { api } from '../libs/axios';
 
 // Interface que define o formato do objeto Cliente
 /*
@@ -24,7 +25,7 @@ interface Produto{
   categoria: string;
 }
 
-const Clientes = () => {
+const Produtos = () => {
   // Usa o hook useCRUD passando a entidade "users" e o tipo Cliente.
   // A URL base do hook será algo como: https://suaapi.com/users
   const { data, loading, error, create, getAll, remove } =
@@ -44,9 +45,14 @@ const Clientes = () => {
 
   // Função para cadastrar um novo cliente
   const handleSubmit = async () => {
-    const novoCliente = { nome, preco, qtdStock, categoria };
+    const novoProduto = { nome, preco, qtdStock, categoria };
     try {
-      await create(novoCliente); // Chama o método POST do hook
+      await create({
+        nome: novoProduto.nome,
+        preco: Number(novoProduto.preco),
+        qtdStock: Number(novoProduto.qtdStock),
+        categoria: novoProduto.categoria,
+      }); // Chama o método POST do hook
       setNome('');
       setPreco('');
       setQtdStock('');
@@ -136,6 +142,9 @@ const Clientes = () => {
               <Text>
                 {item.nome}
               </Text>
+              <Text>
+                {item.preco}
+              </Text>
               <Button title="Excluir" onPress={() => handleDelete(item.id!)} />
             </View>
           )}
@@ -148,4 +157,4 @@ const Clientes = () => {
   );
 };
 
-export default Clientes;
+export default Produtos;

@@ -2,7 +2,7 @@ import axios from 'axios';
 
 export const api = axios.create({
   //baseURL: 'https://jsonplaceholder.typicode.com'
-  baseURL: 'http://172.16.0.21:3000'
+  baseURL: 'http://172.16.0.31:3000'
 });
 
 api.interceptors.request.use(

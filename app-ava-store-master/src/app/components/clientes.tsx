@@ -38,12 +38,12 @@ const Produtos = () => {
   const [qtdStock, setQtdStock] = useState('');
   const [categoria, setCategoria] = useState('');
 
-  // useEffect para buscar todos os clientes assim que o componente for montado
+  // useEffect para buscar todos os produtos assim que o componente for montado
   useEffect(() => {
     getAll(); // Chama a função que faz uma requisição GET para a API
   }, []);
 
-  // Função para cadastrar um novo cliente
+  // Função para cadastrar um novo produto
   const handleSubmit = async () => {
     const novoProduto = { nome, preco, qtdStock, categoria };
     try {
@@ -58,21 +58,21 @@ const Produtos = () => {
       setQtdStock('');
       setCategoria('');
     } catch (err) {
-      console.error('Erro ao cadastrar cliente:', err);
+      console.error('Erro ao cadastrar produto:', err);
     }
   };
 
-  // Função para excluir um cliente
+  // Função para excluir um produto
   const handleDelete = async (id: number) => {
     try {
       await remove(id); // Chama o método DELETE do hook
     } catch (err) {
-      console.error('Erro ao excluir cliente:', err);
+      console.error('Erro ao excluir produto:', err);
     }
   };
 
   // Garante que o valor de `data` seja sempre um array
-  const clienteData = Array.isArray(data) ? data : data ? [data] : [];
+  const produtoData = Array.isArray(data) ? data : data ? [data] : [];
 
   return (
     <View style={{ padding: 20 }}>
@@ -127,10 +127,10 @@ const Produtos = () => {
       {loading ? (
         <ActivityIndicator size="large" color="#196e52" />
       ) : error ? (
-        <Text style={{ color: 'red' }}>Erro ao carregar clientes</Text>
+        <Text style={{ color: 'red' }}>Erro ao carregar produtos</Text>
       ) : (
         <FlatList
-          data={clienteData} // Garante que seja um array
+          data={produtoData} // Garante que seja um array
           renderItem={({ item }) => (
             <View
               style={{

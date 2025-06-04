@@ -9,6 +9,8 @@ import {
   View
 } from 'react-native';
 import { api } from '../libs/axios';
+import { useRouter, useNavigation } from 'expo-router';
+
 
 // Interface que define o formato do objeto Cliente
 /*
@@ -26,10 +28,12 @@ interface Produto{
 }
 
 const Produtos = () => {
+  const router = useRouter();
+  const navigation = useNavigation();
   // Usa o hook useCRUD passando a entidade "users" e o tipo Cliente.
   // A URL base do hook será algo como: https://suaapi.com/users
   const { data, loading, error, create, getAll, remove } =
-    //useCRUD<Cliente>('users');
+    //useCRUD<Produto>('users');
     useCRUD<Produto>('produto');
 
   // Estados para armazenar os dados do formulário
@@ -42,6 +46,12 @@ const Produtos = () => {
   useEffect(() => {
     getAll(); // Chama a função que faz uma requisição GET para a API
   }, []);
+
+  const carregarTudo = async () => {
+    //useEffect(() => {
+      getAll(); // Chama a função que faz uma requisição GET para a API
+    //}, []);
+  };
 
   // Função para cadastrar um novo produto
   const handleSubmit = async () => {
@@ -60,6 +70,7 @@ const Produtos = () => {
     } catch (err) {
       console.error('Erro ao cadastrar produto:', err);
     }
+    getAll();
   };
 
   // Função para excluir um produto
@@ -69,6 +80,15 @@ const Produtos = () => {
     } catch (err) {
       console.error('Erro ao excluir produto:', err);
     }
+    getAll();
+  };
+
+  const handleAlterar = (product: Produto) => {
+    //router.push('/components/updateProduto');
+    router.push({
+      pathname: '/components/updateProduto',
+      params: { id: product.id, nome: product.nome, preco: product.preco },
+    });
   };
 
   // Garante que o valor de `data` seja sempre um array
@@ -119,6 +139,12 @@ const Produtos = () => {
         disabled={loading}
       />
 
+      <Button
+        title='carregar'
+        onPress={carregarTudo}
+        disabled={loading}
+      />
+
       <Text style={{ marginTop: 20, fontWeight: 'bold' }}>
         Lista de Clientes:
       </Text>
@@ -143,8 +169,9 @@ const Produtos = () => {
                 {item.nome}
               </Text>
               <Text>
-                {item.preco}
+                R${item.preco}
               </Text>
+              <Button title="Alterar" onPress={() => handleAlterar(item)} />
               <Button title="Excluir" onPress={() => handleDelete(item.id!)} />
             </View>
           )}

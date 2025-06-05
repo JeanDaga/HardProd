@@ -1,5 +1,6 @@
 import {
   ActivityIndicator,
+  Alert,
   Button,
   FlatList,
   Text,
@@ -8,42 +9,59 @@ import {
 } from 'react-native';
 import { useCRUD } from '@/src/hooks/useCrud'; // Importa o hook customizado para operações CRUD
 import React, { useState } from 'react';
-import { useNavigation, useRoute } from '@react-navigation/native';
+import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import { useLocalSearchParams } from 'expo-router';
 
 
-interface Produto{
-  id?: number;
+type Produto = {
+  id: number;
   nome: string;
   preco: number;
   qtdStock: number;
   categoria: string;
-}
+};
 
 
 function updateProduto(){
-    const route = useRoute();
+    //const route = useRoute<RouteProp<ParamList, 'EditarProduto'>>();
     const navigation = useNavigation();
-    const { id, nome: nomeParam, preco: precoParam } = useLocalSearchParams();
+    const route = useRoute<RouteProp<any>>();
+    const { id, nome: initialNome, preco: initialPreco, qtdStock: initialQtdStock, categoria: initialCategoria } = route.params;
+    console.log('params recebidos:', route.params);
 
-    const { data, loading, error, create, getAll, remove, update } =
-        //useCRUD<Produto>('users');
-        useCRUD<Produto>('produto');
-    
+    const [nome, setNome] = useState(initialNome);
+    const [preco, setPreco] = useState(String(initialPreco));
+    const [qtdStock, setQtdStock] = useState(String(initialQtdStock));
+    const [categoria, setCategoria] = useState(initialCategoria);
 
-    const [nome, setNome] = useState(nomeParam || '');
-    const [preco, setPreco] = useState(precoParam ? precoParam.toString() : '');
-
-    //const [nome, setNome] = useState('');
-    //const [preco, setPreco] = useState('');
-    const [qtdStock, setQtdStock] = useState('');
-    const [categoria, setCategoria] = useState('');
+    //const { update, loading } = useCRUD<Produto>('produto');
+    const { update} =
+      useCRUD<Produto>('produto');
 
     const salvar = () => {
         
         navigation.goBack();
     }
 
+    const handleSalvar = async () => {
+    try {
+      const dadosAtualizados = {
+        nome,
+        preco: parseFloat(preco),
+        qtdStock: parseFloat(qtdStock),
+        categoria
+      };
+      console.log('Enviando dados:', { dadosAtualizados });
+
+      await update(id, dadosAtualizados);
+
+      Alert.alert('Sucesso', 'Produto atualizado com sucesso!');
+      navigation.goBack();
+    } catch (err) {
+      console.error('Erro ao atualizar produto:', err.response?.data || err.message || err);
+      Alert.alert('Erro', 'Não foi possível atualizar o produto.');
+    }
+  };
 
 return(
     <View style={{ padding: 20 }}>
@@ -83,7 +101,7 @@ return(
             style={{ borderBottomWidth: 1, marginBottom: 20 }}
           />
 
-          <Button title="Salvar" onPress={salvar} />
+          <Button title="Salvar" onPress={handleSalvar} />
     </View>
 )
 };

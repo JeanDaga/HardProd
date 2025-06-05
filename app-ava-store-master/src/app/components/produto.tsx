@@ -33,7 +33,6 @@ const Produtos = () => {
   // Usa o hook useCRUD passando a entidade "users" e o tipo Cliente.
   // A URL base do hook será algo como: https://suaapi.com/users
   const { data, loading, error, create, getAll, remove } =
-    //useCRUD<Produto>('users');
     useCRUD<Produto>('produto');
 
   // Estados para armazenar os dados do formulário
@@ -48,9 +47,7 @@ const Produtos = () => {
   }, []);
 
   const carregarTudo = async () => {
-    //useEffect(() => {
       getAll(); // Chama a função que faz uma requisição GET para a API
-    //}, []);
   };
 
   // Função para cadastrar um novo produto
@@ -87,7 +84,7 @@ const Produtos = () => {
     //router.push('/components/updateProduto');
     router.push({
       pathname: '/components/updateProduto',
-      params: { id: product.id, nome: product.nome, preco: product.preco },
+      params: { id: product.id, nome: product.nome, preco: product.preco, qtdStock: product.qtdStock, categoria: product.categoria },
     });
   };
 

@@ -39,7 +39,7 @@ export function useCRUD<T>(baseUrl: string) {
   const getById = (id: number | string) => handleRequest('get', String(id));
   const create = <D>(item: D) => handleRequest('post', '', item);
   const update = <D>(id: number | string, item: D) =>
-    handleRequest('put', String(id), item);
+    handleRequest('patch', String(id), item);
   const remove = (id: number | string) => handleRequest('delete', String(id));
 
   return {

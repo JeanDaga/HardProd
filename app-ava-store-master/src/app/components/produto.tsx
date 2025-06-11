@@ -2,23 +2,19 @@ import { useCRUD } from '@/src/hooks/useCrud'; // Importa o hook customizado par
 import React, { useEffect, useState } from 'react';
 import {
   ActivityIndicator,
+  Alert,
   Button,
   FlatList,
   Text,
   TextInput,
-  View
+  View,
+  StyleSheet
 } from 'react-native';
 import { api } from '../libs/axios';
 import { useRouter, useNavigation } from 'expo-router';
 
 
-// Interface que define o formato do objeto Cliente
-/*
-interface Cliente {
-  id?: number; // ID opcional (gerado pela API)
-  nome: string;
-  email: string;
-}*/
+// Interface que define o formato do objeto Produto
 interface Produto{
   id?: number;
   nome: string;
@@ -50,9 +46,17 @@ const Produtos = () => {
       getAll(); // Chama a função que faz uma requisição GET para a API
   };
 
+  /*function verificarDados(){
+    if((nome) == ''){
+      Alert.alert('Erro', 'Todos os campos devem ser preenchidos.');
+    }
+  }*/
+
   // Função para cadastrar um novo produto
   const handleSubmit = async () => {
     const novoProduto = { nome, preco, qtdStock, categoria };
+    //verificarDados();
+    if((nome && preco && qtdStock && categoria) !== ''){
     try {
       await create({
         nome: novoProduto.nome,
@@ -64,8 +68,13 @@ const Produtos = () => {
       setPreco('');
       setQtdStock('');
       setCategoria('');
+      Alert.alert('Sucesso', 'Produto cadastrado com sucesso!');
     } catch (err) {
       console.error('Erro ao cadastrar produto:', err);
+      Alert.alert('Erro', 'Não foi possível cadastrar o produto.');
+    }
+    }else{
+      Alert.alert('Erro', 'Todos os campos devem ser preenchidos.');
     }
     getAll();
   };
@@ -74,8 +83,10 @@ const Produtos = () => {
   const handleDelete = async (id: number) => {
     try {
       await remove(id); // Chama o método DELETE do hook
+      Alert.alert('Sucesso', 'Produto deletado com sucesso!');
     } catch (err) {
       console.error('Erro ao excluir produto:', err);
+      Alert.alert('Erro', 'Não foi possível deletar o produto.');
     }
     getAll();
   };
@@ -136,12 +147,9 @@ const Produtos = () => {
         disabled={loading}
       />
 
-      <Button
-        title='carregar'
-        onPress={carregarTudo}
-        disabled={loading}
-      />
-
+      <Button title='carregar' onPress={carregarTudo} disabled={loading} />
+      
+        
       <Text style={{ marginTop: 20, fontWeight: 'bold' }}>
         Lista de Clientes:
       </Text>
@@ -182,3 +190,9 @@ const Produtos = () => {
 };
 
 export default Produtos;
+
+const styles = StyleSheet.create({
+  carregar: { borderBottomWidth: 1, marginBottom: 10, padding: 8 },
+  title: { fontSize: 24, marginBottom: 20, textAlign: 'center' },
+  error: { color: 'red', marginBottom: 10 }
+});

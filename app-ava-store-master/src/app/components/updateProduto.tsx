@@ -13,13 +13,21 @@ import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import { useLocalSearchParams } from 'expo-router';
 
 
-type Produto = {
+/*type Produto = {
   id: number;
   nome: string;
   preco: number;
   qtdStock: number;
   categoria: string;
-};
+};*/
+
+interface Produto{
+  id?: number;
+  nome: string;
+  preco: number;
+  qtdStock: number;
+  categoria: string;
+}
 
 
 function updateProduto(){
@@ -29,36 +37,35 @@ function updateProduto(){
     const { id, nome: initialNome, preco: initialPreco, qtdStock: initialQtdStock, categoria: initialCategoria } = route.params;
     console.log('params recebidos:', route.params);
 
+
     const [nome, setNome] = useState(initialNome);
     const [preco, setPreco] = useState(String(initialPreco));
     const [qtdStock, setQtdStock] = useState(String(initialQtdStock));
     const [categoria, setCategoria] = useState(initialCategoria);
 
-    //const { update, loading } = useCRUD<Produto>('produto');
-    const { update} =
+    
+    const { update } =
       useCRUD<Produto>('produto');
 
-    const salvar = () => {
-        
-        navigation.goBack();
-    }
-
-    const handleSalvar = async () => {
+  const handleSalvar = async () => {
     try {
       const dadosAtualizados = {
         nome,
-        preco: parseFloat(preco),
-        qtdStock: parseFloat(qtdStock),
+        preco: Number(preco),
+        qtdStock: Number(qtdStock),
         categoria
       };
       console.log('Enviando dados:', { dadosAtualizados });
-
-      await update(id, dadosAtualizados);
-
-      Alert.alert('Sucesso', 'Produto atualizado com sucesso!');
-      navigation.goBack();
+      if(dadosAtualizados.nome && dadosAtualizados.preco && dadosAtualizados.qtdStock && dadosAtualizados.categoria != null){
+        await update(id, dadosAtualizados);
+        Alert.alert('Sucesso', 'Produto atualizado com sucesso!');
+        navigation.goBack();
+      }else{
+        Alert.alert('Erro', 'Os campos devem ser preenchidos para alteração.');
+      }
+      
     } catch (err) {
-      console.error('Erro ao atualizar produto:', err.response?.data || err.message || err);
+      //console.error('Erro ao atualizar produto:', err.response?.data || err.message || err);
       Alert.alert('Erro', 'Não foi possível atualizar o produto.');
     }
   };

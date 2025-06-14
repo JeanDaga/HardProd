@@ -19,10 +19,10 @@ export default function ProfileScreen() {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.text}>Bem-vindo, {user?.email}</Text>
+      <Text style={styles.text}>Bem-vindo ao HardProd</Text>
 
       <Button title="Produtos" onPress={handleProdutos} />
-
+      <View style={styles.space} />
       <Button title="Sair" onPress={handleLogout} />
     </View>
   );
@@ -35,5 +35,9 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center'
   },
-  text: { fontSize: 20, marginBottom: 20 }
+  text: { fontSize: 20, marginBottom: 20, height: 100 },
+  space: {
+    width: 20, // or whatever size you need
+    height: 20,
+  }
 });

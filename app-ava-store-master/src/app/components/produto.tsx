@@ -8,7 +8,8 @@ import {
   Text,
   TextInput,
   View,
-  StyleSheet
+  StyleSheet,
+  TouchableOpacity
 } from 'react-native';
 import { api } from '../libs/axios';
 import { useRouter, useNavigation } from 'expo-router';
@@ -46,16 +47,10 @@ const Produtos = () => {
       getAll(); // Chama a função que faz uma requisição GET para a API
   };
 
-  /*function verificarDados(){
-    if((nome) == ''){
-      Alert.alert('Erro', 'Todos os campos devem ser preenchidos.');
-    }
-  }*/
 
   // Função para cadastrar um novo produto
   const handleSubmit = async () => {
     const novoProduto = { nome, preco, qtdStock, categoria };
-    //verificarDados();
     if((nome && preco && qtdStock && categoria) !== ''){
     try {
       await create({
@@ -92,18 +87,26 @@ const Produtos = () => {
   };
 
   const handleAlterar = (product: Produto) => {
-    //router.push('/components/updateProduto');
     router.push({
       pathname: '/components/updateProduto',
       params: { id: product.id, nome: product.nome, preco: product.preco, qtdStock: product.qtdStock, categoria: product.categoria },
     });
   };
 
+  const voltarMenu = () => {
+    router.push('/profile');
+  };
+  
+
   // Garante que o valor de `data` seja sempre um array
   const produtoData = Array.isArray(data) ? data : data ? [data] : [];
 
   return (
-    <View style={{ padding: 20 }}>
+    <View style={{ padding: 20}}>
+      <View style={{ justifyContent: 'flex-start', alignItems: 'flex-start', height:50 }}>
+        <Button title='Voltar ao Menu' onPress={voltarMenu}/>
+      </View>
+      
       <Text style={{ fontSize: 18, marginBottom: 10 }}>
         Cadastro de Produto
       </Text>
@@ -147,7 +150,14 @@ const Produtos = () => {
         disabled={loading}
       />
 
-      <Button title='carregar' onPress={carregarTudo} disabled={loading} />
+      <View style={styles.space} />
+
+      {/* Botão para carregar a lista */}
+      <Button
+        title={loading ? 'Carregando...' : 'Carregar'}
+        onPress={carregarTudo} 
+        disabled={loading}
+      />
       
         
       <Text style={{ marginTop: 20, fontWeight: 'bold' }}>
@@ -177,6 +187,7 @@ const Produtos = () => {
                 R${item.preco}
               </Text>
               <Button title="Alterar" onPress={() => handleAlterar(item)} />
+              
               <Button title="Excluir" onPress={() => handleDelete(item.id!)} />
             </View>
           )}
@@ -192,7 +203,8 @@ const Produtos = () => {
 export default Produtos;
 
 const styles = StyleSheet.create({
-  carregar: { borderBottomWidth: 1, marginBottom: 10, padding: 8 },
-  title: { fontSize: 24, marginBottom: 20, textAlign: 'center' },
-  error: { color: 'red', marginBottom: 10 }
+  space: {
+    width: 20, // or whatever size you need
+    height: 20,
+  }
 });

@@ -2,7 +2,7 @@ import axios from 'axios';
 
 export const api = axios.create({
   //baseURL: 'https://jsonplaceholder.typicode.com'
-  baseURL: 'http://172.16.0.34:3000'
+  baseURL: 'https://cad-produtosintegracao-production.up.railway.app'
 });
 
 api.interceptors.request.use(

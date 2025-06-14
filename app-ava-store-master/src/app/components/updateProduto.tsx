@@ -10,16 +10,8 @@ import {
 import { useCRUD } from '@/src/hooks/useCrud'; // Importa o hook customizado para operações CRUD
 import React, { useState } from 'react';
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
-import { useLocalSearchParams } from 'expo-router';
+import { useLocalSearchParams, useRouter } from 'expo-router';
 
-
-/*type Produto = {
-  id: number;
-  nome: string;
-  preco: number;
-  qtdStock: number;
-  categoria: string;
-};*/
 
 interface Produto{
   id?: number;
@@ -32,6 +24,7 @@ interface Produto{
 
 function updateProduto(){
     //const route = useRoute<RouteProp<ParamList, 'EditarProduto'>>();
+    const router1 = useRouter();
     const navigation = useNavigation();
     const route = useRoute<RouteProp<any>>();
     const { id, nome: initialNome, preco: initialPreco, qtdStock: initialQtdStock, categoria: initialCategoria } = route.params;
@@ -50,17 +43,20 @@ function updateProduto(){
   const handleSalvar = async () => {
     try {
       const dadosAtualizados = {
-        nome,
+        nome: String(nome),
         preco: Number(preco),
         qtdStock: Number(qtdStock),
-        categoria
+        categoria: String(categoria)
       };
       console.log('Enviando dados:', { dadosAtualizados });
       if(dadosAtualizados.nome && dadosAtualizados.preco && dadosAtualizados.qtdStock && dadosAtualizados.categoria != null){
         await update(id, dadosAtualizados);
         Alert.alert('Sucesso', 'Produto atualizado com sucesso!');
-        navigation.goBack();
+        console.log('dadosAtulaizados: ', dadosAtualizados);
+        //navigation.goBack();
+        router1.push('/components/produto');
       }else{
+        console.log('dadosAtulaizados: ', dadosAtualizados)
         Alert.alert('Erro', 'Os campos devem ser preenchidos para alteração.');
       }
       

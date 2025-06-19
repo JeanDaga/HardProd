@@ -23,7 +23,6 @@ interface Produto{
 
 
 function updateProduto(){
-    //const route = useRoute<RouteProp<ParamList, 'EditarProduto'>>();
     const router1 = useRouter();
     const navigation = useNavigation();
     const route = useRoute<RouteProp<any>>();
@@ -49,7 +48,7 @@ function updateProduto(){
         categoria: String(categoria)
       };
       console.log('Enviando dados:', { dadosAtualizados });
-      if(dadosAtualizados.nome && dadosAtualizados.preco && dadosAtualizados.qtdStock && dadosAtualizados.categoria != null){
+      if(dadosAtualizados.nome && dadosAtualizados.preco && dadosAtualizados.qtdStock && dadosAtualizados.categoria != ''){
         await update(id, dadosAtualizados);
         Alert.alert('Sucesso', 'Produto atualizado com sucesso!');
         console.log('dadosAtulaizados: ', dadosAtualizados);
@@ -104,7 +103,7 @@ return(
             style={{ borderBottomWidth: 1, marginBottom: 20 }}
           />
 
-          <Button title="Salvar" onPress={handleSalvar} />
+          <Button title="Salvar" color="green" onPress={handleSalvar} />
     </View>
 )
 };

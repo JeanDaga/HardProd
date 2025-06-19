@@ -102,7 +102,7 @@ const Produtos = () => {
   const produtoData = Array.isArray(data) ? data : data ? [data] : [];
 
   return (
-    <View style={{ padding: 20}}>
+    <View style={{ padding: 20, flex:1}}>
       <View style={{ justifyContent: 'flex-start', alignItems: 'flex-start', height:50 }}>
         <Button title='Voltar ao Menu' onPress={voltarMenu}/>
       </View>
@@ -161,7 +161,7 @@ const Produtos = () => {
       
         
       <Text style={{ marginTop: 20, fontWeight: 'bold' }}>
-        Lista de Clientes:
+        Lista de Produtos:
       </Text>
 
       {/* Exibe um indicador de carregamento, mensagem de erro ou a lista */}
@@ -186,9 +186,9 @@ const Produtos = () => {
               <Text>
                 R${item.preco}
               </Text>
-              <Button title="Alterar" onPress={() => handleAlterar(item)} />
+              <Button title="Alterar" color="#ff8c00" onPress={() => handleAlterar(item)} />
               
-              <Button title="Excluir" onPress={() => handleDelete(item.id!)} />
+              <Button title="Excluir" color="red" onPress={() => handleDelete(item.id!)} />
             </View>
           )}
           keyExtractor={(item) =>

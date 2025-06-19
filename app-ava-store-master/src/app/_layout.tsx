@@ -19,11 +19,3 @@ export default function Layout(){
     );
 }
 
-/*
-export default function RootLayout() {
-  return (
-    <AuthProvider>
-      <Stack />
-    </AuthProvider>
-  );
-}*/
